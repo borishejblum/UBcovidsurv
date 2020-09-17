@@ -1,9 +1,9 @@
 #' @import shiny
 app_server <- function(input, output, session) {
 
-    if(is.null(input$scalingfactor)){
-        scalingfactor <- 1
-    }
+    # reactive(if(is.null(input$scalingfactor)){
+    #     scalingfactor <- 1
+    # })
     
     output$distPlot <- renderPlot({
         plot_prior_post(alpha = input$alpha, beta = input$beta, 
