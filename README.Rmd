@@ -12,6 +12,9 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ```
+
+-> https://shiny-u-bordeaux-covidsurv.apps.math.cnrs.fr
+
 # UBcovidsurv
 
 `UBcovidsurv` encapsulate a shiny app 
@@ -21,7 +24,7 @@ knitr::opts_chunk$set(
 You can install the development version from [GitHub](https://github.com/borishejblum/UBcovidsurv):
 ```{r GitHub-install, eval=FALSE}
 #install.packages("devtools")
-devtools::install_github("borishejblum/vici")
+devtools::install_github("borishejblum/UBcovidsurv")
 ```
 
 
@@ -32,7 +35,7 @@ UBcovidsurv::run_app()
 
 ## Deployed UBcovidsurv
 
- * Latest **development** version is deployed at https://shiny-vici.apps.math.cnrs.fr/
+ * Latest **development** version is deployed at https://shiny-u-bordeaux-covidsurv.apps.math.cnrs.fr
 
 -- Boris Hejblum
 
