@@ -10,6 +10,6 @@ LazyData: true
 Imports:
     dplyr,
     ggplot2,
-    HDinterval,
+    HDInterval,
     shiny
 RoxygenNote: 7.1.1
