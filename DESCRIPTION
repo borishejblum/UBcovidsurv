@@ -1,0 +1,13 @@
+Package: UBcovidsurv
+Title: Monitoring COVID19 PCR tests positivity in University of Bordeaux
+Version: 0.0.1
+Date: 2020-09-17
+Authors@R: person('Boris', 'Hejblum', email = 'boris.hejblum@u-bordeaux.fr', role = c('cre', 'aut'))
+Description: 
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports:
+    ggplot2,
+    shiny
+RoxygenNote: 7.1.1

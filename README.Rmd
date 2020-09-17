@@ -1,0 +1,40 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# UBcovidsurv
+
+`UBcovidsurv` encapsulate a shiny app 
+
+## Installation
+
+You can install the development version from [GitHub](https://github.com/borishejblum/UBcovidsurv):
+```{r GitHub-install, eval=FALSE}
+#install.packages("devtools")
+devtools::install_github("borishejblum/vici")
+```
+
+
+Then you can launch the app with:
+``` r
+UBcovidsurv::run_app()
+```
+
+## Deployed VICI
+
+ * Latest **development** version is deployed at https://shiny-vici.apps.math.cnrs.fr/  
+
+ * Latest **stable** version is deployed at http://vici.bph.u-bordeaux.fr/
+
+-- Boris Hejblum
+
