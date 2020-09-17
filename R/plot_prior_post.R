@@ -19,18 +19,21 @@ plot_prior_post <- function(alpha, beta, nsuccess, ntrials, credibility_mass, lo
   CI <- cred_int(credibility_mass = credibility_mass, alpha = alpha, beta = beta, nsuccess = nsuccess, ntrials = ntrials)
   
   p <- ggplot(data2plot, aes(x=value)) + 
-    geom_line(aes(y=pdf, col=dist)) + 
+    geom_line(aes(y=pdf, col=dist)) +
     theme_classic() + 
     ylab("Densité de probabilité") + 
-    xlab("Incidence") + #expression(theta)) + 
-    geom_ribbon(data = data2plot %>% filter(dist == "a posteriori", value >= CI["lower"], value <= CI["upper"]),
-                aes(x=value, ymin=0, ymax=pdf, fill=dist), alpha=0.2) +
-    guides(colour=guide_legend(title="Distribution")) +
-    NULL
+    xlab("Incidence") #expression(theta)) + 
   
   if(!is.null(incid_ref)){
-    p <- p + geom_vline(xintercept = incid_ref, aes(color="Incidence de réference"), linetype = "dashed")
+    p <- p + geom_vline(aes(linetype = "Incidence de réference", xintercept = incid_ref), color="grey20") +
+      scale_linetype_manual("", values="dashed")
   }
+  
+  p <- p + geom_ribbon(data = data2plot %>% filter(dist == "a posteriori", value >= CI["lower"], value <= CI["upper"]),
+                       aes(x=value, ymin=0, ymax=pdf, fill=paste0("Interval de crédibilité à ", credibility_mass*100, "%")), alpha=0.2) +
+    scale_color_manual("Distribution", breaks = c("a priori", "a posteriori"), 
+                       values=c("dodgerblue", "red3")) +
+    scale_fill_manual("", values=c("red3")) 
   
   
   if(logscale){
@@ -60,11 +63,9 @@ plot_prior_post <- function(alpha, beta, nsuccess, ntrials, credibility_mass, lo
                    aes(color = "a posteriori"), linetype = "dotted")
   }
   
-  
-  
-  p <- p + guides(fill=guide_legend(title=paste0("Interval de crédibilité à ", credibility_mass*100, "%"), 
-                                    #override.aes = list(linetype="dotted")
-  ))
+  p <- p + guides(fill=guide_legend(override.aes = list(linetype="dotted", color="red3")),
+                  color=guide_legend(override.aes = list(linetype="solid"))
+  )
   
   return(p)
 }
