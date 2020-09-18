@@ -20,7 +20,7 @@ app_ui <- function() {
                 #              value = NULL),
                 numericInput("incid_ref",
                              label = "Incidence de référence",
-                             value = 153/100000),
+                             value = 123/100000),
                 h3("Prior"),
                 sliderInput("alpha",
                             "Alpha",
