@@ -23,8 +23,7 @@ plot_prior_post <- function(alpha, beta, nsuccess, ntrials, credibility_mass, lo
   p <- ggplot(data2plot, aes(x=value)) + 
     geom_line(aes(y=pdf, col=dist)) +
     theme_classic() + 
-    ylab("Densité de probabilité (normalisée)") + 
-    xlab("Incidence") #expression(theta)) + 
+    ylab("Densité de probabilité (normalisée)") 
   
   if(!is.null(incid_ref)){
     p <- p + geom_vline(aes(linetype = "Incidence de réference", xintercept = incid_ref), color="grey20") +
@@ -50,7 +49,8 @@ plot_prior_post <- function(alpha, beta, nsuccess, ntrials, credibility_mass, lo
                                      alpha = alpha, beta = beta,
                                      nsuccess = nsuccess, ntrials = ntrials),
                    aes(color = "a posteriori"), linetype = "dotted") +
-      scale_x_log10() + expand_limits(x=10^-5)
+      scale_x_log10() + expand_limits(x=10^-5) + 
+      xlab("Incidence (échelle log10)") #expression(theta)) + 
   }else{
     p <- p +  
       geom_segment(x = CI["lower"], xend = CI["lower"], y = 0, 
@@ -62,7 +62,8 @@ plot_prior_post <- function(alpha, beta, nsuccess, ntrials, credibility_mass, lo
                    yend = dposterior(theta = CI["upper"], 
                                      alpha = alpha, beta = beta,
                                      nsuccess = nsuccess, ntrials = ntrials),
-                   aes(color = "a posteriori"), linetype = "dotted")
+                   aes(color = "a posteriori"), linetype = "dotted") + 
+      xlab("Incidence") #expression(theta)) + 
   }
   
   p <- p + guides(fill=guide_legend(override.aes = list(linetype="dotted", color="red3")),
