@@ -16,6 +16,7 @@ app_server <- function(input, output, session) {
     output$resTable <- renderTable({
         table_res(alpha = input$alpha, beta = input$beta, 
                   nsuccess = input$nsuccess, ntrials = input$ntrials,
-                  credibility_mass = input$credibility_mass)
+                  credibility_mass = input$credibility_mass,
+                  ref_incid = input$incid_ref)
     })
 }
