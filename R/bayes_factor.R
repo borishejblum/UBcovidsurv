@@ -17,7 +17,7 @@ bayes_factor_interp <- function(BF, precision = 2){
   }else if(BF < 10^2){
     interp <- paste0(round(BF, precision), " (très forte augmentation)")
   }else if(BF > 10^2){
-    interp <- paste0(round(BF, precision), " (augmentation décisive)")
+    interp <- "> 100 (augmentation décisive)"
   }
   
   return(interp)
