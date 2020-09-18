@@ -5,23 +5,25 @@ plot_prior_post <- function(alpha, beta, nsuccess, ntrials, credibility_mass, lo
                             incid_ref = NULL){
   
   my_xseq <- 10^(seq(from=-5, to=0, length.out = 1000))
-  data2plot <- rbind.data.frame(
-    cbind.data.frame("value" = my_xseq, 
-                     "pdf" = dprior(theta = my_xseq, 
-                                    alpha = alpha, beta = beta), 
-                     "dist"="a priori"),
-    cbind.data.frame("value" = my_xseq, 
-                     "pdf" = dposterior(theta = my_xseq, 
-                                        alpha = alpha, beta = beta,
-                                        nsuccess = nsuccess, ntrials = ntrials), 
-                     "dist"="a posteriori")
-  )
+  data2plot_prior <- cbind.data.frame("value" = my_xseq, 
+                                      "pdf" = dprior(theta = my_xseq, 
+                                                     alpha = alpha, beta = beta), 
+                                      "dist"="a priori")
+  data2plot_post <- cbind.data.frame("value" = my_xseq, 
+                   "pdf" = dposterior(theta = my_xseq, 
+                                      alpha = alpha, beta = beta,
+                                      nsuccess = nsuccess, ntrials = ntrials), 
+                   "dist"="a posteriori")
+  data2plot_prior$pdf <- data2plot_prior$pdf/max(data2plot_prior$pdf)
+  data2plot_post$pdf <- data2plot_post$pdf/max(data2plot_post$pdf)
+  data2plot <- rbind.data.frame(data2plot_prior, data2plot_post)
+  
   CI <- cred_int(credibility_mass = credibility_mass, alpha = alpha, beta = beta, nsuccess = nsuccess, ntrials = ntrials)
   
   p <- ggplot(data2plot, aes(x=value)) + 
     geom_line(aes(y=pdf, col=dist)) +
     theme_classic() + 
-    ylab("Densité de probabilité") + 
+    ylab("Densité de probabilité (normalisée)") + 
     xlab("Incidence") #expression(theta)) + 
   
   if(!is.null(incid_ref)){

@@ -3,6 +3,7 @@ dprior <- function(theta, alpha = 1, beta = 1){
   dbeta(x = theta, shape1 = alpha, shape2 = beta)
 }
 
+#binomial likelihood
 likelihood <- function(nsuccess, ntrials, theta){
   return(theta^nsuccess*(1-theta)^(ntrials-nsuccess))
 }
