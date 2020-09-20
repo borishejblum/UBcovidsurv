@@ -1,24 +1,23 @@
 #' @import ggplot2
 #' @import dplyr
 
-plot_prior_post <- function(alpha, beta, nsuccess, ntrials, credibility_mass, logscale,
-                            incid_ref = NULL){
+plot_prior_post <- function(alpha, beta, ncases, ntrials, credibility_mass, logscale,
+                            incid_ref = NULL, dprior, dposterior, rposterior){
   
+
   my_xseq <- 10^(seq(from=-5, to=0, length.out = 1000))
   data2plot_prior <- cbind.data.frame("value" = my_xseq, 
-                                      "pdf" = dprior(theta = my_xseq, 
-                                                     alpha = alpha, beta = beta), 
+                                      "pdf" = dprior(theta = my_xseq), 
                                       "dist"="a priori")
   data2plot_post <- cbind.data.frame("value" = my_xseq, 
-                   "pdf" = dposterior(theta = my_xseq, 
-                                      alpha = alpha, beta = beta,
-                                      nsuccess = nsuccess, ntrials = ntrials), 
+                   "pdf" = dposterior(theta = my_xseq), 
                    "dist"="a posteriori")
+  max_post <- max(data2plot_post$pdf)
   data2plot_prior$pdf <- data2plot_prior$pdf/max(data2plot_prior$pdf)
-  data2plot_post$pdf <- data2plot_post$pdf/max(data2plot_post$pdf)
+  data2plot_post$pdf <- data2plot_post$pdf/max_post
   data2plot <- rbind.data.frame(data2plot_prior, data2plot_post)
   
-  CI <- cred_int(credibility_mass = credibility_mass, alpha = alpha, beta = beta, nsuccess = nsuccess, ntrials = ntrials)
+  CI <- cred_int(credibility_mass = credibility_mass, rposterior = rposterior)
   
   p <- ggplot(data2plot, aes(x=value)) + 
     geom_line(aes(y=pdf, col=dist)) +
@@ -40,28 +39,20 @@ plot_prior_post <- function(alpha, beta, nsuccess, ntrials, credibility_mass, lo
   if(logscale){
     p <- p + 
       geom_segment(x = log10(CI["lower"]), xend = log10(CI["lower"]), y = 0, 
-                   yend = dposterior(theta = CI["lower"], 
-                                     alpha = alpha, beta = beta,
-                                     nsuccess = nsuccess, ntrials = ntrials),
+                   yend = dposterior(theta = CI["lower"])/max_post,
                    aes(color = "a posteriori"), linetype = "dotted") +
       geom_segment(x = log10(CI["upper"]), xend = log10(CI["upper"]), y = 0, 
-                   yend = dposterior(theta = CI["upper"], 
-                                     alpha = alpha, beta = beta,
-                                     nsuccess = nsuccess, ntrials = ntrials),
+                   yend = dposterior(theta = CI["upper"])/max_post,
                    aes(color = "a posteriori"), linetype = "dotted") +
       scale_x_log10() + expand_limits(x=10^-5) + 
       xlab("Incidence (échelle log10)") #expression(theta)) + 
   }else{
     p <- p +  
       geom_segment(x = CI["lower"], xend = CI["lower"], y = 0, 
-                   yend = dposterior(theta = CI["lower"], 
-                                     alpha = alpha, beta = beta,
-                                     nsuccess = nsuccess, ntrials = ntrials),
+                   yend = dposterior(theta = CI["lower"])/max_post,
                    aes(color = "a posteriori"), linetype = "dotted") +
       geom_segment(x = CI["upper"], xend = CI["upper"], y = 0, 
-                   yend = dposterior(theta = CI["upper"], 
-                                     alpha = alpha, beta = beta,
-                                     nsuccess = nsuccess, ntrials = ntrials),
+                   yend = dposterior(theta = CI["upper"])/max_post,
                    aes(color = "a posteriori"), linetype = "dotted") + 
       xlab("Incidence") #expression(theta)) + 
   }

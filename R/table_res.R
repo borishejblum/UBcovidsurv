@@ -1,27 +1,22 @@
-table_res <- function(alpha = 1, beta = 1, 
-                      nsuccess, ntrials,
-                      credibility_mass = 0.8,
+table_res <- function(credibility_mass = 0.8,
                       nsims = 100000, 
-                      ref_incid){
+                      ref_incid,
+                      dprior,
+                      dposterior,
+                      rposterior,
+                      MAP_fun,
+                      posterior_mean_fun
+                      ){
   
-  shape1 <- alpha + nsuccess
-  shape2 <- beta + (ntrials-nsuccess)
-  
-  posterior_mean <- shape1/(shape1 + shape2)
-  
-  MAP <- (shape1 - 1)/(shape1 + shape2 - 2)
-  
-  posterior_median <- median(rposterior(n = nsims, alpha = alpha, beta = beta, nsuccess = nsuccess, ntrials = ntrials))
+  posterior_mean <- posterior_mean_fun()
+  MAP <- MAP_fun()
+  posterior_median <- median(rposterior(n = nsims))
 
-  mypost <- function(x){
-    dposterior(theta = x, alpha = alpha, beta = beta, nsuccess = nsuccess, ntrials = ntrials)
-  }
-  BF_mean <- bayes_factor(mypost, ref_inc = ref_incid, est_incid = posterior_mean)
-  BF_MAP <- bayes_factor(mypost, ref_inc = ref_incid, est_incid = MAP)
-  BF_median <- bayes_factor(mypost, ref_inc = ref_incid, est_incid = posterior_median)
+  BF_mean <- bayes_factor(dprior, dposterior, ref_inc = ref_incid, est_incid = posterior_mean)
+  BF_MAP <- bayes_factor(dprior, dposterior, ref_inc = ref_incid, est_incid = MAP)
+  BF_median <- bayes_factor(dprior, dposterior, ref_inc = ref_incid, est_incid = posterior_median)
   
-  CI <- cred_int(nsims = nsims, credibility_mass = credibility_mass, 
-                 alpha = alpha, beta = beta, nsuccess = nsuccess, ntrials = ntrials)
+  CI <- cred_int(nsims = nsims, credibility_mass = credibility_mass, rposterior = rposterior)
   
   precision <- 2
   res <- rbind.data.frame(

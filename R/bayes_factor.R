@@ -1,5 +1,6 @@
-bayes_factor <- function(dposterior, ref_inc, est_incid){
-  BF <- dposterior(est_incid)/dposterior(ref_inc)
+bayes_factor <- function(dprior, dposterior, ref_inc, est_incid){
+  BF <- exp(dposterior(est_incid, log=TRUE) - dprior(est_incid, log=TRUE) - 
+    (dposterior(ref_inc, log=TRUE) - dprior(ref_inc, log=TRUE)))
   return(BF)
 }
 
